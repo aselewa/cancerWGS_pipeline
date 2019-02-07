@@ -1,0 +1,18 @@
+
+name:
+     biotools
+channels:
+    - conda-forge
+    - bioconda
+    - defaults
+    - dranew
+dependencies:
+    - python
+    - fastqc
+    - snakemake
+    - samtools
+    - bcftools
+    - gatk4
+    - picard
+    - hmmcopy_utils
+

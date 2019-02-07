@@ -1,0 +1,869 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cluster nodes: 12
+Job counts:
+	count	jobs
+	1	all
+	24	call_germline_snps
+	1	call_somatic_cnvs
+	24	call_somatic_mutations
+	1	clean_up_and_finish
+	1	concat_filter_vcf_files
+	1	concat_somatic_vcfs
+	2	concat_tumor_vcf_files
+	1	filter_somatic_calls
+	24	get_germline_SNP_pos
+	1	keep_pass_SNPs
+	2	readCounts_in_window
+	2	remove_duplicates
+	24	tumor_VCF_at_germline_SNPs
+	109
+
+[Wed Feb  6 18:41:59 2019]
+rule remove_duplicates:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/aligned/DO30_normal.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    jobid: 2
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: bam_name=DO30_normal
+
+picard MarkDuplicates I=/project2/xinhe/alan/Cancer/testing_wgs/aligned/DO30_normal.bam O=/project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam M=/project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam_metrics.txt -Xmx8G REMOVE_DUPLICATES=TRUE TMP_DIR=/project2/xinhe/alan/Cancer/testing_wgs/tmp/ && samtools index /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+Submitted job 2 with external jobid 'Submitted batch job 57122388'.
+
+[Wed Feb  6 18:42:00 2019]
+rule remove_duplicates:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/aligned/DO30_tumor.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam
+    jobid: 1
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam
+    wildcards: bam_name=DO30_tumor
+
+picard MarkDuplicates I=/project2/xinhe/alan/Cancer/testing_wgs/aligned/DO30_tumor.bam O=/project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam M=/project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam_metrics.txt -Xmx8G REMOVE_DUPLICATES=TRUE TMP_DIR=/project2/xinhe/alan/Cancer/testing_wgs/tmp/ && samtools index /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam
+Submitted job 1 with external jobid 'Submitted batch job 57122389'.
+[Wed Feb  6 18:42:39 2019]
+Finished job 2.
+1 of 109 steps (0.92%) done
+
+[Wed Feb  6 18:42:39 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_1_germline_SNPS_unfiltered.vcf.gz
+    jobid: 10
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_1_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=1
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/genome.fa  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_1_germline_SNPS_unfiltered.vcf.gz -L 1
+[Wed Feb  6 18:42:39 2019]
+Finished job 1.
+2 of 109 steps (2%) done
+Submitted job 10 with external jobid 'Submitted batch job 57122399'.
+
+[Wed Feb  6 18:42:39 2019]
+rule readCounts_in_window:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_readCounts_1k_Titan.wig
+    jobid: 7
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_readCounts_1k_Titan.wig; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: bam_name=DO30_normal
+
+readCounter -w 1000 /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam > /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_readCounts_1k_Titan.wig
+Submitted job 7 with external jobid 'Submitted batch job 57122400'.
+
+[Wed Feb  6 18:42:39 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_21_germline_SNPS_unfiltered.vcf.gz
+    jobid: 30
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_21_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=21
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/genome.fa  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_21_germline_SNPS_unfiltered.vcf.gz -L 21
+Submitted job 30 with external jobid 'Submitted batch job 57122401'.
+
+[Wed Feb  6 18:42:39 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_11_germline_SNPS_unfiltered.vcf.gz
+    jobid: 20
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_11_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=11
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/genome.fa  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_11_germline_SNPS_unfiltered.vcf.gz -L 11
+Submitted job 20 with external jobid 'Submitted batch job 57122402'.
+
+[Wed Feb  6 18:42:39 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_6_germline_SNPS_unfiltered.vcf.gz
+    jobid: 15
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_6_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=6
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/genome.fa  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_6_germline_SNPS_unfiltered.vcf.gz -L 6
+Submitted job 15 with external jobid 'Submitted batch job 57122403'.
+
+[Wed Feb  6 18:42:39 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_7_germline_SNPS_unfiltered.vcf.gz
+    jobid: 16
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_7_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=7
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/genome.fa  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_7_germline_SNPS_unfiltered.vcf.gz -L 7
+Submitted job 16 with external jobid 'Submitted batch job 57122404'.
+
+[Wed Feb  6 18:42:39 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_X_germline_SNPS_unfiltered.vcf.gz
+    jobid: 32
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_X_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=X
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/genome.fa  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_X_germline_SNPS_unfiltered.vcf.gz -L X
+Submitted job 32 with external jobid 'Submitted batch job 57122405'.
+
+[Wed Feb  6 18:42:39 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_19_germline_SNPS_unfiltered.vcf.gz
+    jobid: 28
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_19_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=19
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/genome.fa  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_19_germline_SNPS_unfiltered.vcf.gz -L 19
+Submitted job 28 with external jobid 'Submitted batch job 57122406'.
+
+[Wed Feb  6 18:42:39 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_13_germline_SNPS_unfiltered.vcf.gz
+    jobid: 22
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_13_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=13
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/genome.fa  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_13_germline_SNPS_unfiltered.vcf.gz -L 13
+Submitted job 22 with external jobid 'Submitted batch job 57122407'.
+
+[Wed Feb  6 18:42:39 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_20_germline_SNPS_unfiltered.vcf.gz
+    jobid: 29
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_20_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=20
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/genome.fa  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_20_germline_SNPS_unfiltered.vcf.gz -L 20
+Submitted job 29 with external jobid 'Submitted batch job 57122408'.
+
+[Wed Feb  6 18:42:40 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_Y_germline_SNPS_unfiltered.vcf.gz
+    jobid: 33
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_Y_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=Y
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/genome.fa  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_Y_germline_SNPS_unfiltered.vcf.gz -L Y
+Submitted job 33 with external jobid 'Submitted batch job 57122409'.
+
+[Wed Feb  6 18:42:40 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_14_somatic_snps_indels.vcf.gz
+    jobid: 98
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_14_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=14
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam -tumor 9a5bb831-8cb8-4de0-b94b-088cb38def1a -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -normal 37244d55-4316-491a-966c-9e2b4372b5b9 -R /project2/xinhe/alan/Cancer/refGenome/genome.fa -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_14_somatic_snps_indels.vcf.gz -L 14
+Submitted job 98 with external jobid 'Submitted batch job 57122410'.
+[Wed Feb  6 18:43:11 2019]
+Finished job 7.
+3 of 109 steps (3%) done
+
+[Wed Feb  6 18:43:11 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_3_somatic_snps_indels.vcf.gz
+    jobid: 87
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_3_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=3
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam -tumor 9a5bb831-8cb8-4de0-b94b-088cb38def1a -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -normal 37244d55-4316-491a-966c-9e2b4372b5b9 -R /project2/xinhe/alan/Cancer/refGenome/genome.fa -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_3_somatic_snps_indels.vcf.gz -L 3
+Submitted job 87 with external jobid 'Submitted batch job 57122411'.
+[Wed Feb  6 18:43:22 2019]
+Finished job 30.
+4 of 109 steps (4%) done
+
+[Wed Feb  6 18:43:22 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_17_somatic_snps_indels.vcf.gz
+    jobid: 101
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_17_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=17
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam -tumor 9a5bb831-8cb8-4de0-b94b-088cb38def1a -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -normal 37244d55-4316-491a-966c-9e2b4372b5b9 -R /project2/xinhe/alan/Cancer/refGenome/genome.fa -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_17_somatic_snps_indels.vcf.gz -L 17
+Submitted job 101 with external jobid 'Submitted batch job 57122412'.
+[Wed Feb  6 18:43:33 2019]
+Finished job 28.
+5 of 109 steps (5%) done
+
+[Wed Feb  6 18:43:33 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_5_somatic_snps_indels.vcf.gz
+    jobid: 89
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_5_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=5
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam -tumor 9a5bb831-8cb8-4de0-b94b-088cb38def1a -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -normal 37244d55-4316-491a-966c-9e2b4372b5b9 -R /project2/xinhe/alan/Cancer/refGenome/genome.fa -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_5_somatic_snps_indels.vcf.gz -L 5
+[Wed Feb  6 18:43:33 2019]
+Finished job 29.
+6 of 109 steps (6%) done
+[Wed Feb  6 18:43:33 2019]
+Finished job 33.
+7 of 109 steps (6%) done
+Submitted job 89 with external jobid 'Submitted batch job 57122413'.
+
+[Wed Feb  6 18:43:33 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_16_somatic_snps_indels.vcf.gz
+    jobid: 100
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_16_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=16
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam -tumor 9a5bb831-8cb8-4de0-b94b-088cb38def1a -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -normal 37244d55-4316-491a-966c-9e2b4372b5b9 -R /project2/xinhe/alan/Cancer/refGenome/genome.fa -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_16_somatic_snps_indels.vcf.gz -L 16
+Submitted job 100 with external jobid 'Submitted batch job 57122414'.
+
+[Wed Feb  6 18:43:33 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_4_somatic_snps_indels.vcf.gz
+    jobid: 88
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_4_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=4
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam -tumor 9a5bb831-8cb8-4de0-b94b-088cb38def1a -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -normal 37244d55-4316-491a-966c-9e2b4372b5b9 -R /project2/xinhe/alan/Cancer/refGenome/genome.fa -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_4_somatic_snps_indels.vcf.gz -L 4
+Submitted job 88 with external jobid 'Submitted batch job 57122415'.
+[Wed Feb  6 18:43:44 2019]
+Finished job 22.
+8 of 109 steps (7%) done
+
+[Wed Feb  6 18:43:44 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_9_somatic_snps_indels.vcf.gz
+    jobid: 93
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_9_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=9
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam -tumor 9a5bb831-8cb8-4de0-b94b-088cb38def1a -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -normal 37244d55-4316-491a-966c-9e2b4372b5b9 -R /project2/xinhe/alan/Cancer/refGenome/genome.fa -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_9_somatic_snps_indels.vcf.gz -L 9
+[Wed Feb  6 18:43:44 2019]
+Finished job 98.
+9 of 109 steps (8%) done
+Submitted job 93 with external jobid 'Submitted batch job 57122416'.
+
+[Wed Feb  6 18:43:44 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_18_somatic_snps_indels.vcf.gz
+    jobid: 102
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_18_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=18
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam -tumor 9a5bb831-8cb8-4de0-b94b-088cb38def1a -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -normal 37244d55-4316-491a-966c-9e2b4372b5b9 -R /project2/xinhe/alan/Cancer/refGenome/genome.fa -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_18_somatic_snps_indels.vcf.gz -L 18
+Submitted job 102 with external jobid 'Submitted batch job 57122417'.
+[Wed Feb  6 18:43:55 2019]
+Finished job 20.
+10 of 109 steps (9%) done
+
+[Wed Feb  6 18:43:55 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_10_somatic_snps_indels.vcf.gz
+    jobid: 94
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_10_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=10
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam -tumor 9a5bb831-8cb8-4de0-b94b-088cb38def1a -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -normal 37244d55-4316-491a-966c-9e2b4372b5b9 -R /project2/xinhe/alan/Cancer/refGenome/genome.fa -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_10_somatic_snps_indels.vcf.gz -L 10
+[Wed Feb  6 18:43:55 2019]
+Finished job 15.
+11 of 109 steps (10%) done
+[Wed Feb  6 18:43:55 2019]
+Finished job 16.
+12 of 109 steps (11%) done
+[Wed Feb  6 18:43:55 2019]
+Finished job 32.
+13 of 109 steps (12%) done
+Submitted job 94 with external jobid 'Submitted batch job 57122418'.
+
+[Wed Feb  6 18:43:55 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_12_somatic_snps_indels.vcf.gz
+    jobid: 96
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_12_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=12
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam -tumor 9a5bb831-8cb8-4de0-b94b-088cb38def1a -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -normal 37244d55-4316-491a-966c-9e2b4372b5b9 -R /project2/xinhe/alan/Cancer/refGenome/genome.fa -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_12_somatic_snps_indels.vcf.gz -L 12
+Submitted job 96 with external jobid 'Submitted batch job 57122419'.
+
+[Wed Feb  6 18:43:55 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_8_somatic_snps_indels.vcf.gz
+    jobid: 92
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_8_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=8
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam -tumor 9a5bb831-8cb8-4de0-b94b-088cb38def1a -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -normal 37244d55-4316-491a-966c-9e2b4372b5b9 -R /project2/xinhe/alan/Cancer/refGenome/genome.fa -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_8_somatic_snps_indels.vcf.gz -L 8
+Submitted job 92 with external jobid 'Submitted batch job 57122420'.
+
+[Wed Feb  6 18:43:55 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_2_somatic_snps_indels.vcf.gz
+    jobid: 86
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_2_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=2
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam -tumor 9a5bb831-8cb8-4de0-b94b-088cb38def1a -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -normal 37244d55-4316-491a-966c-9e2b4372b5b9 -R /project2/xinhe/alan/Cancer/refGenome/genome.fa -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_2_somatic_snps_indels.vcf.gz -L 2
+Submitted job 86 with external jobid 'Submitted batch job 57122421'.
+[Wed Feb  6 18:44:07 2019]
+Finished job 101.
+14 of 109 steps (13%) done
+
+[Wed Feb  6 18:44:07 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_15_somatic_snps_indels.vcf.gz
+    jobid: 99
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_15_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=15
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam -tumor 9a5bb831-8cb8-4de0-b94b-088cb38def1a -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -normal 37244d55-4316-491a-966c-9e2b4372b5b9 -R /project2/xinhe/alan/Cancer/refGenome/genome.fa -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_15_somatic_snps_indels.vcf.gz -L 15
+Submitted job 99 with external jobid 'Submitted batch job 57122425'.
+[Wed Feb  6 18:44:28 2019]
+Finished job 10.
+15 of 109 steps (14%) done
+
+[Wed Feb  6 18:44:28 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_22_somatic_snps_indels.vcf.gz
+    jobid: 106
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_22_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=22
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam -tumor 9a5bb831-8cb8-4de0-b94b-088cb38def1a -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -normal 37244d55-4316-491a-966c-9e2b4372b5b9 -R /project2/xinhe/alan/Cancer/refGenome/genome.fa -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_22_somatic_snps_indels.vcf.gz -L 22
+Submitted job 106 with external jobid 'Submitted batch job 57122426'.
+[Wed Feb  6 18:44:39 2019]
+Finished job 102.
+16 of 109 steps (15%) done
+
+[Wed Feb  6 18:44:39 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_20_somatic_snps_indels.vcf.gz
+    jobid: 104
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_20_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=20
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam -tumor 9a5bb831-8cb8-4de0-b94b-088cb38def1a -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -normal 37244d55-4316-491a-966c-9e2b4372b5b9 -R /project2/xinhe/alan/Cancer/refGenome/genome.fa -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_20_somatic_snps_indels.vcf.gz -L 20
+[Wed Feb  6 18:44:39 2019]
+Finished job 100.
+17 of 109 steps (16%) done
+Submitted job 104 with external jobid 'Submitted batch job 57122427'.
+
+[Wed Feb  6 18:44:39 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_13_somatic_snps_indels.vcf.gz
+    jobid: 97
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_13_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=13
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam -tumor 9a5bb831-8cb8-4de0-b94b-088cb38def1a -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -normal 37244d55-4316-491a-966c-9e2b4372b5b9 -R /project2/xinhe/alan/Cancer/refGenome/genome.fa -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_13_somatic_snps_indels.vcf.gz -L 13
+Submitted job 97 with external jobid 'Submitted batch job 57122428'.
+[Wed Feb  6 18:44:40 2019]
+Finished job 87.
+18 of 109 steps (17%) done
+
+[Wed Feb  6 18:44:40 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_19_somatic_snps_indels.vcf.gz
+    jobid: 103
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_19_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=19
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam -tumor 9a5bb831-8cb8-4de0-b94b-088cb38def1a -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -normal 37244d55-4316-491a-966c-9e2b4372b5b9 -R /project2/xinhe/alan/Cancer/refGenome/genome.fa -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_19_somatic_snps_indels.vcf.gz -L 19
+Submitted job 103 with external jobid 'Submitted batch job 57122429'.
+[Wed Feb  6 18:45:01 2019]
+Finished job 94.
+19 of 109 steps (17%) done
+
+[Wed Feb  6 18:45:01 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_Y_somatic_snps_indels.vcf.gz
+    jobid: 108
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_Y_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=Y
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam -tumor 9a5bb831-8cb8-4de0-b94b-088cb38def1a -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -normal 37244d55-4316-491a-966c-9e2b4372b5b9 -R /project2/xinhe/alan/Cancer/refGenome/genome.fa -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_Y_somatic_snps_indels.vcf.gz -L Y
+[Wed Feb  6 18:45:01 2019]
+Finished job 96.
+20 of 109 steps (18%) done
+[Wed Feb  6 18:45:01 2019]
+Finished job 92.
+21 of 109 steps (19%) done
+[Wed Feb  6 18:45:01 2019]
+Finished job 93.
+22 of 109 steps (20%) done
+Submitted job 108 with external jobid 'Submitted batch job 57122430'.
+
+[Wed Feb  6 18:45:03 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_6_somatic_snps_indels.vcf.gz
+    jobid: 90
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_6_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=6
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam -tumor 9a5bb831-8cb8-4de0-b94b-088cb38def1a -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -normal 37244d55-4316-491a-966c-9e2b4372b5b9 -R /project2/xinhe/alan/Cancer/refGenome/genome.fa -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_6_somatic_snps_indels.vcf.gz -L 6
+Submitted job 90 with external jobid 'Submitted batch job 57122431'.
+
+[Wed Feb  6 18:45:03 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_7_somatic_snps_indels.vcf.gz
+    jobid: 91
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_7_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=7
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam -tumor 9a5bb831-8cb8-4de0-b94b-088cb38def1a -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -normal 37244d55-4316-491a-966c-9e2b4372b5b9 -R /project2/xinhe/alan/Cancer/refGenome/genome.fa -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_7_somatic_snps_indels.vcf.gz -L 7
+Submitted job 91 with external jobid 'Submitted batch job 57122432'.
+
+[Wed Feb  6 18:45:03 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_X_somatic_snps_indels.vcf.gz
+    jobid: 107
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_X_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=X
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam -tumor 9a5bb831-8cb8-4de0-b94b-088cb38def1a -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -normal 37244d55-4316-491a-966c-9e2b4372b5b9 -R /project2/xinhe/alan/Cancer/refGenome/genome.fa -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_X_somatic_snps_indels.vcf.gz -L X
+Submitted job 107 with external jobid 'Submitted batch job 57122433'.
+[Wed Feb  6 18:45:12 2019]
+Finished job 89.
+23 of 109 steps (21%) done
+
+[Wed Feb  6 18:45:12 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_11_somatic_snps_indels.vcf.gz
+    jobid: 95
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_11_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=11
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam -tumor 9a5bb831-8cb8-4de0-b94b-088cb38def1a -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -normal 37244d55-4316-491a-966c-9e2b4372b5b9 -R /project2/xinhe/alan/Cancer/refGenome/genome.fa -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_11_somatic_snps_indels.vcf.gz -L 11
+[Wed Feb  6 18:45:12 2019]
+Finished job 88.
+24 of 109 steps (22%) done
+[Wed Feb  6 18:45:12 2019]
+Finished job 99.
+25 of 109 steps (23%) done
+Submitted job 95 with external jobid 'Submitted batch job 57122441'.
+
+[Wed Feb  6 18:45:13 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_21_somatic_snps_indels.vcf.gz
+    jobid: 105
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_21_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=21
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam -tumor 9a5bb831-8cb8-4de0-b94b-088cb38def1a -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -normal 37244d55-4316-491a-966c-9e2b4372b5b9 -R /project2/xinhe/alan/Cancer/refGenome/genome.fa -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_21_somatic_snps_indels.vcf.gz -L 21
+Submitted job 105 with external jobid 'Submitted batch job 57122442'.
+
+[Wed Feb  6 18:45:13 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_1_somatic_snps_indels.vcf.gz
+    jobid: 85
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_1_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=1
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam -tumor 9a5bb831-8cb8-4de0-b94b-088cb38def1a -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -normal 37244d55-4316-491a-966c-9e2b4372b5b9 -R /project2/xinhe/alan/Cancer/refGenome/genome.fa -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_1_somatic_snps_indels.vcf.gz -L 1
+Submitted job 85 with external jobid 'Submitted batch job 57122443'.
+[Wed Feb  6 18:45:23 2019]
+Finished job 106.
+26 of 109 steps (24%) done
+
+[Wed Feb  6 18:45:23 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_15_germline_SNPS_unfiltered.vcf.gz
+    jobid: 24
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_15_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=15
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/genome.fa  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_15_germline_SNPS_unfiltered.vcf.gz -L 15
+[Wed Feb  6 18:45:23 2019]
+Finished job 86.
+27 of 109 steps (25%) done
+Submitted job 24 with external jobid 'Submitted batch job 57122444'.
+
+[Wed Feb  6 18:45:23 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_2_germline_SNPS_unfiltered.vcf.gz
+    jobid: 11
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_2_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=2
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/genome.fa  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_2_germline_SNPS_unfiltered.vcf.gz -L 2
+Submitted job 11 with external jobid 'Submitted batch job 57122445'.
+[Wed Feb  6 18:45:34 2019]
+Finished job 104.
+28 of 109 steps (26%) done
+
+[Wed Feb  6 18:45:34 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_8_germline_SNPS_unfiltered.vcf.gz
+    jobid: 17
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_8_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=8
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/genome.fa  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_8_germline_SNPS_unfiltered.vcf.gz -L 8
+[Wed Feb  6 18:45:34 2019]
+Finished job 103.
+29 of 109 steps (27%) done
+Submitted job 17 with external jobid 'Submitted batch job 57122446'.
+
+[Wed Feb  6 18:45:34 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_22_germline_SNPS_unfiltered.vcf.gz
+    jobid: 31
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_22_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=22
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/genome.fa  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_22_germline_SNPS_unfiltered.vcf.gz -L 22
+Submitted job 31 with external jobid 'Submitted batch job 57122447'.
+[Wed Feb  6 18:45:45 2019]
+Finished job 97.
+30 of 109 steps (28%) done
+
+[Wed Feb  6 18:45:45 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_12_germline_SNPS_unfiltered.vcf.gz
+    jobid: 21
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_12_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=12
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/genome.fa  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_12_germline_SNPS_unfiltered.vcf.gz -L 12
+Submitted job 21 with external jobid 'Submitted batch job 57122449'.
+[Wed Feb  6 18:45:56 2019]
+Finished job 105.
+31 of 109 steps (28%) done
+
+[Wed Feb  6 18:45:56 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_10_germline_SNPS_unfiltered.vcf.gz
+    jobid: 19
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_10_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=10
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/genome.fa  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_10_germline_SNPS_unfiltered.vcf.gz -L 10
+Submitted job 19 with external jobid 'Submitted batch job 57122450'.
+[Wed Feb  6 18:46:07 2019]
+Finished job 24.
+32 of 109 steps (29%) done
+
+[Wed Feb  6 18:46:07 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_9_germline_SNPS_unfiltered.vcf.gz
+    jobid: 18
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_9_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=9
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/genome.fa  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_9_germline_SNPS_unfiltered.vcf.gz -L 9
+[Wed Feb  6 18:46:07 2019]
+Finished job 108.
+33 of 109 steps (30%) done
+Submitted job 18 with external jobid 'Submitted batch job 57122451'.
+
+[Wed Feb  6 18:46:08 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_18_germline_SNPS_unfiltered.vcf.gz
+    jobid: 27
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_18_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=18
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/genome.fa  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_18_germline_SNPS_unfiltered.vcf.gz -L 18
+Submitted job 27 with external jobid 'Submitted batch job 57122452'.
+[Wed Feb  6 18:46:29 2019]
+Finished job 31.
+34 of 109 steps (31%) done
+
+[Wed Feb  6 18:46:29 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_5_germline_SNPS_unfiltered.vcf.gz
+    jobid: 14
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_5_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=5
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/genome.fa  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_5_germline_SNPS_unfiltered.vcf.gz -L 5
+[Wed Feb  6 18:46:29 2019]
+Finished job 95.
+35 of 109 steps (32%) done
+[Wed Feb  6 18:46:29 2019]
+Finished job 91.
+36 of 109 steps (33%) done
+[Wed Feb  6 18:46:29 2019]
+Finished job 107.
+37 of 109 steps (34%) done
+Submitted job 14 with external jobid 'Submitted batch job 57122453'.
+
+[Wed Feb  6 18:46:29 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_16_germline_SNPS_unfiltered.vcf.gz
+    jobid: 25
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_16_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=16
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/genome.fa  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_16_germline_SNPS_unfiltered.vcf.gz -L 16
+Submitted job 25 with external jobid 'Submitted batch job 57122454'.
+
+[Wed Feb  6 18:46:29 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_4_germline_SNPS_unfiltered.vcf.gz
+    jobid: 13
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_4_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=4
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/genome.fa  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_4_germline_SNPS_unfiltered.vcf.gz -L 4
+Submitted job 13 with external jobid 'Submitted batch job 57122455'.
+
+[Wed Feb  6 18:46:29 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_17_germline_SNPS_unfiltered.vcf.gz
+    jobid: 26
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_17_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=17
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/genome.fa  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_17_germline_SNPS_unfiltered.vcf.gz -L 17
+Submitted job 26 with external jobid 'Submitted batch job 57122456'.
+[Wed Feb  6 18:46:40 2019]
+Finished job 90.
+38 of 109 steps (35%) done
+
+[Wed Feb  6 18:46:40 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_14_germline_SNPS_unfiltered.vcf.gz
+    jobid: 23
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_14_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=14
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/genome.fa  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_14_germline_SNPS_unfiltered.vcf.gz -L 14
+Submitted job 23 with external jobid 'Submitted batch job 57122457'.
+[Wed Feb  6 18:46:51 2019]
+Finished job 21.
+39 of 109 steps (36%) done
+
+[Wed Feb  6 18:46:51 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_3_germline_SNPS_unfiltered.vcf.gz
+    jobid: 12
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_3_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: id=DO30, chr=3
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/testing_wgs/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/genome.fa  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_3_germline_SNPS_unfiltered.vcf.gz -L 3
+[Wed Feb  6 18:46:51 2019]
+Finished job 17.
+40 of 109 steps (37%) done
+[Wed Feb  6 18:46:51 2019]
+Finished job 11.
+41 of 109 steps (38%) done
+Submitted job 12 with external jobid 'Submitted batch job 57122458'.
+
+[Wed Feb  6 18:46:51 2019]
+rule get_germline_SNP_pos:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_21_germline_SNPS_unfiltered.vcf.gz
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_21_germline_SNPs_VARIANT_POS.txt
+    jobid: 81
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_21_germline_SNPs_VARIANT_POS.txt; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_21_germline_SNPS_unfiltered.vcf.gz
+    wildcards: id=DO30, chr=21
+
+bcftools query -f '%CHROM 	 %POS' /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_21_germline_SNPS_unfiltered.vcf.gz > /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_21_germline_SNPs_VARIANT_POS.txt
+Submitted job 81 with external jobid 'Submitted batch job 57122459'.
+
+[Wed Feb  6 18:46:51 2019]
+rule readCounts_in_window:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_readCounts_1k_Titan.wig
+    jobid: 6
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_readCounts_1k_Titan.wig; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam
+    wildcards: bam_name=DO30_tumor
+
+readCounter -w 1000 /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam > /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_readCounts_1k_Titan.wig
+Submitted job 6 with external jobid 'Submitted batch job 57122460'.
+[Wed Feb  6 18:47:02 2019]
+Finished job 81.
+42 of 109 steps (39%) done
+
+[Wed Feb  6 18:47:02 2019]
+rule tumor_VCF_at_germline_SNPs:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_21_germline_SNPs_VARIANT_POS.txt, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_21_tumor_at_germline_SNPs.vcf.gz
+    jobid: 55
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_21_tumor_at_germline_SNPs.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_21_germline_SNPs_VARIANT_POS.txt
+    wildcards: id=DO30, chr=21
+
+bcftools mpileup -f /project2/xinhe/alan/Cancer/refGenome/genome.fa -R /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_21_germline_SNPs_VARIANT_POS.txt -o /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_21_tumor_at_germline_SNPs.vcf.gz -O z /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam
+[Wed Feb  6 18:47:02 2019]
+Finished job 27.
+43 of 109 steps (39%) done
+Submitted job 55 with external jobid 'Submitted batch job 57122461'.
+
+[Wed Feb  6 18:47:03 2019]
+rule get_germline_SNP_pos:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_11_germline_SNPS_unfiltered.vcf.gz
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_11_germline_SNPs_VARIANT_POS.txt
+    jobid: 71
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_11_germline_SNPs_VARIANT_POS.txt; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_11_germline_SNPS_unfiltered.vcf.gz
+    wildcards: id=DO30, chr=11
+
+bcftools query -f '%CHROM 	 %POS' /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_11_germline_SNPS_unfiltered.vcf.gz > /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_11_germline_SNPs_VARIANT_POS.txt
+Submitted job 71 with external jobid 'Submitted batch job 57122462'.
+[Wed Feb  6 18:47:03 2019]
+Finished job 85.
+44 of 109 steps (40%) done
+
+[Wed Feb  6 18:47:03 2019]
+rule concat_somatic_vcfs:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_1_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_2_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_3_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_4_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_5_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_6_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_7_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_8_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_9_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_10_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_11_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_12_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_13_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_14_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_15_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_16_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_17_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_18_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_19_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_20_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_21_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_22_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_X_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_Y_somatic_snps_indels.vcf.gz
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_somatic_SNPs_Indels_unfiltered.vcf.gz
+    jobid: 60
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_somatic_SNPs_Indels_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_21_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_22_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_Y_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_11_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_19_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_4_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_X_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_5_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_2_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_14_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_16_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_15_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_6_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_9_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_13_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_8_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_18_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_3_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_7_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_1_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_10_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_20_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_17_somatic_snps_indels.vcf.gz, /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_12_somatic_snps_indels.vcf.gz
+    wildcards: id=DO30
+
+bcftools concat /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_1_somatic_snps_indels.vcf.gz /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_2_somatic_snps_indels.vcf.gz /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_3_somatic_snps_indels.vcf.gz /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_4_somatic_snps_indels.vcf.gz /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_5_somatic_snps_indels.vcf.gz /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_6_somatic_snps_indels.vcf.gz /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_7_somatic_snps_indels.vcf.gz /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_8_somatic_snps_indels.vcf.gz /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_9_somatic_snps_indels.vcf.gz /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_10_somatic_snps_indels.vcf.gz /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_11_somatic_snps_indels.vcf.gz /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_12_somatic_snps_indels.vcf.gz /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_13_somatic_snps_indels.vcf.gz /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_14_somatic_snps_indels.vcf.gz /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_15_somatic_snps_indels.vcf.gz /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_16_somatic_snps_indels.vcf.gz /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_17_somatic_snps_indels.vcf.gz /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_18_somatic_snps_indels.vcf.gz /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_19_somatic_snps_indels.vcf.gz /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_20_somatic_snps_indels.vcf.gz /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_21_somatic_snps_indels.vcf.gz /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_22_somatic_snps_indels.vcf.gz /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_X_somatic_snps_indels.vcf.gz /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_Y_somatic_snps_indels.vcf.gz | bgzip -c > /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_somatic_SNPs_Indels_unfiltered.vcf.gz && tabix -p vcf /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_somatic_SNPs_Indels_unfiltered.vcf.gz
+Submitted job 60 with external jobid 'Submitted batch job 57122463'.
+[Wed Feb  6 18:47:13 2019]
+Finished job 6.
+45 of 109 steps (41%) done
+
+[Wed Feb  6 18:47:13 2019]
+rule get_germline_SNP_pos:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_20_germline_SNPS_unfiltered.vcf.gz
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_20_germline_SNPs_VARIANT_POS.txt
+    jobid: 80
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_20_germline_SNPs_VARIANT_POS.txt; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_20_germline_SNPS_unfiltered.vcf.gz
+    wildcards: id=DO30, chr=20
+
+bcftools query -f '%CHROM 	 %POS' /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_20_germline_SNPS_unfiltered.vcf.gz > /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_20_germline_SNPs_VARIANT_POS.txt
+Submitted job 80 with external jobid 'Submitted batch job 57122464'.
+[Wed Feb  6 18:47:14 2019]
+Finished job 19.
+46 of 109 steps (42%) done
+
+[Wed Feb  6 18:47:14 2019]
+rule get_germline_SNP_pos:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_18_germline_SNPS_unfiltered.vcf.gz
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_18_germline_SNPs_VARIANT_POS.txt
+    jobid: 78
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_18_germline_SNPs_VARIANT_POS.txt; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_18_germline_SNPS_unfiltered.vcf.gz
+    wildcards: id=DO30, chr=18
+
+bcftools query -f '%CHROM 	 %POS' /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_18_germline_SNPS_unfiltered.vcf.gz > /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_18_germline_SNPs_VARIANT_POS.txt
+Submitted job 78 with external jobid 'Submitted batch job 57122465'.
+[Wed Feb  6 18:47:24 2019]
+Finished job 18.
+47 of 109 steps (43%) done
+
+[Wed Feb  6 18:47:24 2019]
+rule get_germline_SNP_pos:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_1_germline_SNPS_unfiltered.vcf.gz
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_1_germline_SNPs_VARIANT_POS.txt
+    jobid: 61
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_1_germline_SNPs_VARIANT_POS.txt; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_1_germline_SNPS_unfiltered.vcf.gz
+    wildcards: id=DO30, chr=1
+
+bcftools query -f '%CHROM 	 %POS' /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_1_germline_SNPS_unfiltered.vcf.gz > /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_1_germline_SNPs_VARIANT_POS.txt
+Submitted job 61 with external jobid 'Submitted batch job 57122466'.
+[Wed Feb  6 18:47:35 2019]
+Finished job 80.
+48 of 109 steps (44%) done
+
+[Wed Feb  6 18:47:35 2019]
+rule tumor_VCF_at_germline_SNPs:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_20_germline_SNPs_VARIANT_POS.txt, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_20_tumor_at_germline_SNPs.vcf.gz
+    jobid: 54
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_20_tumor_at_germline_SNPs.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_20_germline_SNPs_VARIANT_POS.txt, /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam
+    wildcards: id=DO30, chr=20
+
+bcftools mpileup -f /project2/xinhe/alan/Cancer/refGenome/genome.fa -R /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_20_germline_SNPs_VARIANT_POS.txt -o /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_20_tumor_at_germline_SNPs.vcf.gz -O z /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_tumor_sorted_dedupped.bam
+[Wed Feb  6 18:47:35 2019]
+Error in rule tumor_VCF_at_germline_SNPs:
+    jobid: 55
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_21_tumor_at_germline_SNPs.vcf.gz
+    cluster_jobid: Submitted batch job 57122461
+
+[Wed Feb  6 18:47:35 2019]
+Finished job 71.
+49 of 109 steps (45%) done
+[Wed Feb  6 18:47:35 2019]
+Finished job 25.
+50 of 109 steps (46%) done
+[Wed Feb  6 18:47:35 2019]
+Finished job 26.
+51 of 109 steps (47%) done
+[Wed Feb  6 18:47:35 2019]
+Finished job 60.
+52 of 109 steps (48%) done
+Submitted job 54 with external jobid 'Submitted batch job 57122468'.
+[Wed Feb  6 18:47:36 2019]
+Finished job 78.
+53 of 109 steps (49%) done
+[Wed Feb  6 18:47:36 2019]
+Finished job 61.
+54 of 109 steps (50%) done
+[Wed Feb  6 18:47:46 2019]
+Finished job 23.
+55 of 109 steps (50%) done
+[Wed Feb  6 18:47:56 2019]
+Finished job 12.
+56 of 109 steps (51%) done
+[Wed Feb  6 18:47:56 2019]
+Finished job 14.
+57 of 109 steps (52%) done
+[Wed Feb  6 18:47:56 2019]
+Finished job 13.
+58 of 109 steps (53%) done
+[Wed Feb  6 18:48:06 2019]
+Error in rule tumor_VCF_at_germline_SNPs:
+    jobid: 54
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/VCFs/DO30_20_tumor_at_germline_SNPs.vcf.gz
+    cluster_jobid: Submitted batch job 57122468
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /project2/xinhe/alan/Cancer/wgs_pipeline/.snakemake/log/2019-02-06T184159.033720.snakemake.log

@@ -1,0 +1,33 @@
+{
+    "__default__":
+    {
+        "mem" : 2000,
+	"account" : "pi-xinhe",
+        "time" : "04:00:00",
+        "n" : 1,
+        "tasks": 1,
+        "partition" : "xinhe",
+        "name" : "{rule}-{wildcards}",
+        "logfile":"snakemake"
+    },
+    "sort_bams":
+    {
+        "tasks": 10
+    },
+    "remove_duplicates":
+    {
+        "mem" : 16000
+    },
+    "base_calibrate":
+    {
+        "mem" : 16000
+    },
+    "recalibrate_bam":
+    {
+        "mem" : 16000
+    },
+    "filter_somatic_calls":
+    {
+        "mem": 8000
+    }
+}

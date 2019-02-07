@@ -1,0 +1,32 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cluster nodes: 999
+Job counts:
+	count	jobs
+	1	all
+	24	call_germline_snps
+	1	call_somatic_cnvs
+	24	call_somatic_mutations
+	1	clean_up_and_finish
+	1	concat_filter_vcf_files
+	1	concat_somatic_vcfs
+	2	concat_tumor_vcf_files
+	1	filter_somatic_calls
+	24	get_germline_SNP_pos
+	1	keep_pass_SNPs
+	2	readCounts_in_window
+	2	remove_duplicates
+	24	tumor_VCF_at_germline_SNPs
+	109
+
+[Wed Feb  6 18:33:29 2019]
+rule remove_duplicates:
+    input: /project2/xinhe/alan/Cancer/testing_wgs/aligned/DO30_normal.bam
+    output: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    jobid: 2
+    reason: Missing output files: /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+    wildcards: bam_name=DO30_normal
+
+picard MarkDuplicates I=/project2/xinhe/alan/Cancer/testing_wgs/aligned/DO30_normal.bam O=/project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam M=/project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam_metrics.txt -Xmx8G REMOVE_DUPLICATES=TRUE TMP_DIR=/project2/xinhe/alan/Cancer/testing_wgs/tmp/ && samtools index /project2/xinhe/alan/Cancer/testing_wgs/output/DO30_normal_sorted_dedupped.bam
+WorkflowError in line 68 of /project2/xinhe/alan/Cancer/wgs_pipeline/Snakefile:
+'Wildcards' object has no attribute 'mem'
