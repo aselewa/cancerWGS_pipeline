@@ -44,7 +44,7 @@ my_project/
 After filling out the config file, simply type to run
 
 ```
-snakemake
+snakemake --configfile configfile.yaml
 ```
 
 #### SLURM
