@@ -4,6 +4,7 @@ import glob
 import os
 
 pd = config["proj_dir"]
+fastq = pd + "fastq/"
 aligned = pd + "aligned/"
 output =  pd + "output/"
 VCFs = output + "VCFs/"
@@ -37,12 +38,11 @@ type = ['tumor','normal']
 rule all:
     input:
         expand(aligned + "{i}_{t}.bam",i=id,t=type),    # ALIGNED BAM FILE
-        expand(output + "{s}_sorted_dedupped.bam",s=bam_name),                 # PROCESSED BAM FILE 
         expand(VCFs + "{i}_germline_het_SNPs.vcf.gz",i=id),            # GERMLINE HETERZYGOUS SNPs
         expand(VCFs + "{i}_somatic_SNPs_filtered.vcf.gz",i=id),        # SOMATIC SNPs
         expand(output + "{i}_tumor_Titan.txt",i=id),                     # PROCESSED TUMOR for TITAN CNV Calling    
-        expand(output + "{s}_readCounts_1k_Titan.wig",s=bam_name),              # READ COUNTS OF TUMOR/NORMAL for TITAN CNV Calling
-        expand("{o}{i}_TitanCNA_Calls.txt",o=output,i=id),
+        expand(output + "{i}_{t}_readCounts_1k_Titan.wig",i=id,t=type),              # READ COUNTS OF TUMOR/NORMAL for TITAN CNV Calling
+        expand(output + "{i}_TitanCNA_Calls.txt",o=output,i=id),
         expand(pd + "{i}_confirm_finish.txt",i=id)
 
 rule bwa:
@@ -57,18 +57,18 @@ rule bwa:
 
 rule sort_bams:
     input:
-        aligned + "{sample}.bam"
+        aligned + "{id}_{type}.bam"
     output:
-        output + "{sample}_sorted.bam"
+        output + "{id}_{type}_sorted.bam"
     threads: 10
     shell:
         "samtools sort -@ {threads} -o {output} -O bam {input} -T {output}_temp"
 
 rule remove_duplicates:
     input:
-        aligned + "{bam_name}.bam"
+        aligned + "{id}_{type}_sorted.bam"
     output:
-        output + "{bam_name}_sorted_dedupped.bam"
+        output + "{id}_{type}_sorted_dedupped.bam"
     shell:
         "picard MarkDuplicates I={input} O={output} M={output}_metrics.txt -Xmx8G REMOVE_DUPLICATES=TRUE TMP_DIR={tmp} && samtools index {output}"
 
@@ -139,9 +139,9 @@ rule concat_tumor_vcf_files:
 
 rule readCounts_in_window:
     input:
-        output + "{bam_name}_sorted_dedupped.bam"
+        output + "{id}_{type}_sorted_dedupped.bam"
     output:
-        output + "{bam_name}_readCounts_1k_Titan.wig"
+        output + "{id}_{type}_readCounts_1k_Titan.wig"
     shell:
         "readCounter -w 1000 {input} > {output}"
 
@@ -208,4 +208,6 @@ rule clean_up_and_finish:
         pd + "{id}_confirm_finish.txt"
      shell:
         "rm -r {VCFs}*.tbi {VCFs}{wildcards.id}_splitted* && echo 'DONE!' > {output}"
+ 
+#### COMPLETE
 
