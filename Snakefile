@@ -22,12 +22,8 @@ REF_GENOME = config["REF_GENOME_DIR"]
 
 ## Global wildcards
 
-# bam files  (preprocessing done for all bams)
-bam_name = glob_wildcards(aligned + "{bam_name}.bam").bam_name
-
 #patient id
-id = glob_wildcards(aligned + "{id}_tumor.bam").id
-
+id = glob_wildcards(fastq + "{id}_tumor_R1.fastq.gz").id
 
 #chromosomes
 chr = ["%.1d" % i for i in range(1,23)] + ['X','Y']
@@ -40,6 +36,7 @@ type = ['tumor','normal']
     
 rule all:
     input:
+        expand(aligned + "{i}_{t}.bam",i=id,t=type),    # ALIGNED BAM FILE
         expand(output + "{s}_sorted_dedupped.bam",s=bam_name),                 # PROCESSED BAM FILE 
         expand(VCFs + "{i}_germline_het_SNPs.vcf.gz",i=id),            # GERMLINE HETERZYGOUS SNPs
         expand(VCFs + "{i}_somatic_SNPs_filtered.vcf.gz",i=id),        # SOMATIC SNPs
@@ -48,21 +45,24 @@ rule all:
         expand("{o}{i}_TitanCNA_Calls.txt",o=output,i=id),
         expand(pd + "{i}_confirm_finish.txt",i=id)
 
-# QC
+rule bwa:
+    input:
+        fastq + "{id}_{type}_R1.fastq.gz",
+        fastq + "{id}_{type}_R2.fastq.gz"
+    output:
+        aligned + "{id}_{type}.bam"
+    threads: 16
+    shell:
+        "bwa mem -M -t {threads} ref.fa {input[0]} {input[1]} | samtools view -bS - > {output}"
 
-# ALignment
-
-# Basic BAM file processing 
-
-#rule sort_bams:
-#    input:
-#        aligned + "{sample}.bam"
-#    output:
-#        output + "{sample}_sorted.bam"
-#    threads: 10
-#    shell:
-#        "samtools sort -@ {threads} -o {output} -O bam {input} -T {output}_temp"
-
+rule sort_bams:
+    input:
+        aligned + "{sample}.bam"
+    output:
+        output + "{sample}_sorted.bam"
+    threads: 10
+    shell:
+        "samtools sort -@ {threads} -o {output} -O bam {input} -T {output}_temp"
 
 rule remove_duplicates:
     input:
@@ -72,6 +72,7 @@ rule remove_duplicates:
     shell:
         "picard MarkDuplicates I={input} O={output} M={output}_metrics.txt -Xmx8G REMOVE_DUPLICATES=TRUE TMP_DIR={tmp} && samtools index {output}"
 
+# QUALITY BASE RECALIBRATION (OPTIONAL)
 #rule base_calibrate:
 #    input:
 #        output + "{sample}_sorted_dedupped.bam", 
@@ -126,9 +127,8 @@ rule tumor_VCF_at_germline_SNPs:
     output:
         temp(VCFs + "{id}_{chr}_tumor_at_germline_SNPs.vcf.gz")
     shell:
-        #"bcftools mpileup -f {REF_GENOME} -R {input[0]} -o {output} -O z {input[1]}"
-        "cp {input[0]} {output}"
-
+        "bcftools mpileup -f {REF_GENOME} -R {input[0]} -o {output} -O z {input[1]}"
+    
 rule concat_tumor_vcf_files:
     input:
         expand(VCFs + "{i}_{c}_tumor_at_germline_SNPs.vcf.gz",i=id,c=chr)
