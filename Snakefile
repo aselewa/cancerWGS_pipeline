@@ -53,7 +53,7 @@ rule bwa:
         aligned + "{id}_{type}.bam"
     threads: 16
     shell:
-        "bwa mem -M -t {threads} ref.fa {input[0]} {input[1]} | samtools view -bS - > {output}"
+        "bwa mem -M -t {threads} {REF_GENOME} {input[0]} {input[1]} | samtools view -bS - > {output}"
 
 rule sort_bams:
     input:
