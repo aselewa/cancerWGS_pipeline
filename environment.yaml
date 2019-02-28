@@ -10,6 +10,7 @@ dependencies:
     - python
     - fastqc
     - snakemake
+    - bwa
     - samtools
     - bcftools
     - gatk4
