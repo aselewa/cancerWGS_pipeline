@@ -10,6 +10,10 @@
         "name" : "{rule}-{wildcards}",
         "logfile":"snakemake"
     },
+    "bwa":
+    {
+        "tasks": 16
+    },
     "sort_bams":
     {
         "tasks": 10
