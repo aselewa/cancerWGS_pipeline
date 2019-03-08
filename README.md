@@ -1,17 +1,17 @@
 
 ## Introduction
 
-<div align="center">
-<img src="img/wgsSnakemake.png"  width="400" height="500">
-</div>
-
-This is a Snakemake pipeline written for the processing of whole-genome sequencing data of matched normal-tumor samples. The pipeline takes as input Illumina FASTQ files and will output:
+This repo contains a Snakemake pipeline written for the processing of whole-genome sequencing data of matched normal-tumor samples. The pipeline takes as input Illumina FASTQ files and will output:
 
 * Germline SNPs and tumor BAF at these positions (HaplotypeCaller)
 * Simple somatic mutations (Mutect2)
 * Somatic CNAs (TitanCNA)
 
 The pipeline uses a combination of GATK4 and TitanCNA for calling somatic mutations and copy number alterations.
+
+<div align="center">
+<img src="img/wgsSnakemake.png"  width="400" height="500">
+</div>
 
 ## Environment
 
