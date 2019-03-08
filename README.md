@@ -2,6 +2,8 @@
 
 ## Introduction
 
+![](img/wgsSnakemake.png)
+
 This is a Snakemake pipeline written for the processing of whole-genome sequencing data of matched normal-tumor samples. The pipeline takes as input Illumina FASTQ files and will output:
 
 * Germline SNPs and tumor BAF at these positions (HaplotypeCaller)
