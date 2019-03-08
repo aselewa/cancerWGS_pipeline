@@ -1,8 +1,8 @@
-# Under construction
 
 ## Introduction
 
-![](img/wgsSnakemake.png)
+
+![](img/wgsSnakemake.png =250x250)
 
 This is a Snakemake pipeline written for the processing of whole-genome sequencing data of matched normal-tumor samples. The pipeline takes as input Illumina FASTQ files and will output:
 
