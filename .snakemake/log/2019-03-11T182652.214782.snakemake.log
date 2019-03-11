@@ -1,0 +1,4 @@
+Building DAG of jobs...
+MissingInputException in line 35 of /project2/xinhe/alan/Cancer/cancerWGS_pipeline/preprocess_snakefile:
+Missing input files for rule all:
+/project2/xinhe/alan/Cancer/sampleData/SRR062634_confirm_finish
