@@ -1,0 +1,74 @@
+#!/bin/python
+
+import glob
+import os
+
+pd = config["proj_dir"]
+fastq = pd + "fastq/"
+aligned = pd + "aligned/"
+output =  pd + "output/"
+VCFs = output + "VCFs/"
+
+## Files
+REF_GENOME = config["REF_GENOME_DIR"]
+
+## Global wildcards
+#patient id
+id = glob_wildcards(fastq + "{id}_tumor_R1.fastq.gz").id
+
+#chromosomes
+chr = ["%.1d" % i for i in range(1,23)] + ['X','Y']
+
+rule all:
+    input:
+        expand(VCFs + "{i}_somatic_SNPs_filtered.vcf.gz",i=id),        # SOMATIC SNPs
+
+## Call Somatic Mutations
+
+rule call_somatic_mutations:
+    input:
+        expand(output + "{id}_{type}_sorted_dedupped.bam",type=type, id=id)
+    output:
+        temp(VCFs + "{id}_{chr}_somatic_snps_indels.vcf.gz")
+    params:
+        chrom="{chr}",
+        tumor=config["tumor_sample_name"],
+        normal=config["normal_sample_name"]
+    shell:
+        "gatk --java-options '-Xmx1G -Djava.io.tmpdir={tmp}' Mutect2 -I {input[0]} -tumor {params.tumor} -I {input[1]} -normal {params.normal} -R {REF_GENOME} -O {output} -L {params.chrom}"
+
+rule concat_somatic_vcfs:
+    input:
+        expand(VCFs + "{i}_{c}_somatic_snps_indels.vcf.gz",i=id,c=chr)
+    output:
+        VCFs + "{id}_somatic_SNPs_Indels_unfiltered.vcf.gz"
+    shell:
+        "bcftools concat {input} | bgzip -c > {output} && tabix -p vcf {output}"
+
+rule filter_somatic_calls:
+    input:
+        VCFs + "{id}_somatic_SNPs_Indels_unfiltered.vcf.gz"
+    output:
+        VCFs + "{id}_somatic_SNPs_Indels_filtered.vcf.gz"
+    shell:
+        "gatk FilterMutectCalls -V {input} -O {output}"
+
+rule keep_pass_SNPs:
+    input:
+        VCFs + "{id}_somatic_SNPs_Indels_filtered.vcf.gz"
+    output:
+        VCFs + "{id}_somatic_SNPs_filtered.vcf.gz"
+    params:
+        filter="PASS"
+    shell:
+        "gatk SelectVariants -R {REF_GENOME} --variant {input} -O {output} --select-type-to-exclude INDEL --restrict-alleles-to BIALLELIC --exclude-filtered"
+
+rule clean_up_and_finish:
+     input:
+        VCFs + "{id}_somatic_SNPs_filtered.vcf.gz",
+        VCFs + "{id}_tumor_Titan.txt",
+     output:
+        pd + "{id}_confirm_finish.txt"
+     shell:
+        "rm -r {VCFs}*.tbi {VCFs}{wildcards.id}_splitted* && echo 'DONE!' > {output}"
+ 

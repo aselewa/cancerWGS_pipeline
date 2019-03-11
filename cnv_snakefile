@@ -1,0 +1,92 @@
+#!/bin/python
+
+import glob
+import os
+
+pd = config["proj_dir"]
+fastq = pd + "fastq/"
+aligned = pd + "aligned/"
+output =  pd + "output/"
+VCFs = output + "VCFs/"
+
+## Files
+REF_GENOME = config["REF_GENOME_DIR"]
+SITES_VAR = config["SITES_VAR"]
+
+## Global wildcards
+
+#patient id
+id = glob_wildcards(fastq + "{id}_tumor_R1.fastq.gz").id
+
+#chromosomes
+chr = ["%.1d" % i for i in range(1,23)] + ['X','Y']
+
+
+rule all:
+    input:
+        expand(output + "{i}_TitanCNA_Calls.txt",o=output,i=id)
+
+rule call_germline_snps:
+    input:
+        output + "{id}_normal_sorted_dedupped.bam"
+    output:
+        temp(VCFs + "{id}_{chr}_germline_SNPS_unfiltered.vcf.gz")
+    params:
+        chrom="{chr}"
+    shell:
+        "gatk --java-options '-Xmx1G -Djava.io.tmpdir={tmp}' HaplotypeCaller -I {input} -R {REF_GENOME}  --genotyping-mode DISCOVERY -O {output} -L {params.chrom}"
+
+rule concat_filter_vcf_files:
+    input:
+        expand(VCFs + "{i}_{c}_germline_SNPS_unfiltered.vcf.gz",i=id,c=chr)
+    output:
+        VCFs + "{id}_germline_het_SNPs.vcf.gz"
+    shell:
+        "bcftools concat {input} | bcftools view --types snps | bcftools filter --include \"GT='0/1'\" | gzip -c > {output}"
+
+rule get_germline_SNP_pos:
+    input:
+        VCFs + "{id}_{chr}_germline_SNPS_unfiltered.vcf.gz"
+    output:
+        temp(VCFs + "{id}_{chr}_germline_SNPs_VARIANT_POS.txt")
+    shell:
+        "bcftools query -f '%CHROM \t %POS' {input} > {output}"
+        
+rule tumor_VCF_at_germline_SNPs:
+    input:
+        VCFs + "{id}_{chr}_germline_SNPs_VARIANT_POS.txt",
+        output + "{id}_tumor_sorted_dedupped.bam"
+    output:
+        temp(VCFs + "{id}_{chr}_tumor_at_germline_SNPs.vcf.gz")
+    shell:
+        "bcftools mpileup -f {REF_GENOME} -R {input[0]} -o {output} -O z {input[1]}"
+    
+rule concat_tumor_vcf_files:
+    input:
+        expand(VCFs + "{i}_{c}_tumor_at_germline_SNPs.vcf.gz",i=id,c=chr)
+    output:
+        output + "{id}_tumor_Titan.txt"
+    shell:
+        "bcftools concat {input} | bcftools view --types snps | bcftools query -f '%CHROM,%POS,%REF,%ALT,[%I16\n]' - | awk -F ',' '{{ref=$5+$6; alt=$7+$8; print $1,$2,$3,ref,$4,alt}}' | sed 's/ /\t/g' - > {output}"
+
+rule readCounts_in_window:
+    input:
+        output + "{id}_{type}_sorted_dedupped.bam"
+    output:
+        output + "{id}_{type}_readCounts_1k_Titan.wig"
+    shell:
+        "readCounter -w 1000 {input} > {output}"
+
+rule call_somatic_cnvs:
+    input:
+        output + "{id}_tumor_Titan.txt",
+        output + "{id}_tumor_readCounts_1k_Titan.wig",
+        output + "{id}_normal_readCounts_1k_Titan.wig",
+    output:
+        output + "{id}_TitanCNA_Calls.txt"
+    params:
+        GC_FILE=config["GC_FILE"],
+        MAP_FILE=config["MAP_FILE"],
+        nclust=config["CLONAL_CLUSTERS"]
+    shell:
+        "Rscript scripts/titanCNA_analysis.R {input[0]} {input[1]} {input[2]} {params.GC_FILE} {params.MAP_FILE} {params.nclust} {output}" 

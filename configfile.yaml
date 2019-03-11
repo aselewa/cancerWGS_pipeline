@@ -1,10 +1,11 @@
 #Snakemake configuration file
 
 #project directory this needs to be changed
-proj_dir: /project2/xinhe/alan/Cancer/testing_wgs/
+proj_dir: /project2/xinhe/alan/Cancer/sampleData/
 
 # REF GENOME FILE (must contain .fasta, .fai, .dic)
-REF_GENOME_DIR: /project2/xinhe/alan/Cancer/refGenome/genome.fa
+REF_GENOME_DIR: /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta
+SITES_VAR: /project2/xinhe/alan/Cancer/sites_variation/
 
 # Number of clonal clusters for Titan
 CLONAL_CLUSTERS: 3
@@ -14,6 +15,6 @@ GC_FILE: /project2/xinhe/alan/Cancer/refGenome/gc_hg19.wig
 MAP_FILE: /project2/xinhe/alan/Cancer/refGenome/map_hg19.wig
 
 # Sample names for somatic mutations
-tumor_sample_name: "9a5bb831-8cb8-4de0-b94b-088cb38def1a"
-normal_sample_name: "37244d55-4316-491a-966c-9e2b4372b5b9"
+tumor_sample_name: "tumor"
+normal_sample_name: "normal"
 
