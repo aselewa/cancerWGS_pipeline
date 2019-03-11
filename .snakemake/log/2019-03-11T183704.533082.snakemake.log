@@ -1,3 +1,0 @@
-TypeError in line 32 of /project2/xinhe/alan/Cancer/cancerWGS_pipeline/preprocess_snakefile:
-'builtin_function_or_method' object is not subscriptable
-  File "/project2/xinhe/alan/Cancer/cancerWGS_pipeline/preprocess_snakefile", line 32, in <module>

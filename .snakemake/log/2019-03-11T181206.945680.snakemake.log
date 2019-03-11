@@ -1,5 +1,0 @@
-Building DAG of jobs...
-MissingInputException in line 39 of /project2/xinhe/alan/Cancer/cancerWGS_pipeline/preprocess_snakefile:
-Missing input files for rule bwa:
-/project2/xinhe/alan/Cancer/sampleData/fastq/SRR062634_tumor_sorted_R2.fastq.gz
-/project2/xinhe/alan/Cancer/sampleData/fastq/SRR062634_tumor_sorted_R1.fastq.gz

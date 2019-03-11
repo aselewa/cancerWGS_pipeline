@@ -1,4 +1,0 @@
-Building DAG of jobs...
-MissingInputException in line 66 of /project2/xinhe/alan/Cancer/cancerWGS_pipeline/preprocess_snakefile:
-Missing input files for rule base_calibrate:
-/project2/xinhe/alan/Cancer/sampleData/output/SRR062634_tumor_sorted_dedupped.bam.bai
