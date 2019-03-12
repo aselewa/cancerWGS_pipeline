@@ -20,6 +20,7 @@ if not os.path.isdir(tmp):
 
 ## Files
 REF_GENOME = config["REF_GENOME_DIR"]
+SITES_VAR = config["SITES_VAR"]
 
 ## Global wildcards
 
@@ -28,8 +29,8 @@ id = glob_wildcards(fastq + "{id}_tumor_R1.fastq.gz").id
 type = glob_wildcards(fastq + "{id}_{type}_R1.fastq.gz").type
 
 #chromosomes
-#chr = ["%.1d" % i for i in range(1,23)] + ['X','Y']
-chr = ['chr']
+chr = ["%.1d" % i for i in range(1,23)] + ['X','Y']
+#chr = ['chr']
 
 ####### BEGIN
     
@@ -46,18 +47,18 @@ rule bwa:
         fastq + "{id}_{type}_R2.fastq.gz"
     output:
         aligned + "{id}_{type}.bam"
-    threads: 16
+    threads: 12
     shell:
-        "bwa mem -M -t {threads} {REF_GENOME} {input[0]} {input[1]} | samtools view -bS - > {output}"
+        "bwa mem -M -t {threads} {REF_GENOME} {input[0]} {input[1]} -R '@RG\\tID:{wildcards.id}\\tLB:{wildcards.id}\\tPL:Illumina\\tSM:{wildcards.type}' | samtools view -bS - > {output}"
 
 rule sort_bams:
     input:
         aligned + "{id}_{type}.bam"
     output:
         output + "{id}_{type}_sorted.bam"
-    threads: 10
+    threads: 5
     shell:
-        "samtools sort -@ {threads} -o {output} -O bam {input} -T {output}_temp"
+        "samtools sort -@ {threads} -m 2G -o {output} -O bam {input} -T {output}_temp"
 
 rule remove_duplicates:
     input:
@@ -66,7 +67,7 @@ rule remove_duplicates:
         output + "{id}_{type}_sorted_dedupped.bam",
         output + "{id}_{type}_sorted_dedupped.bam.bai"
     shell:
-        "picard MarkDuplicates I={input} O={output} M={output}_metrics.txt -Xmx8G REMOVE_DUPLICATES=TRUE TMP_DIR={tmp} && samtools index {output}"
+        "picard MarkDuplicates I={input} O={output[0]} M={output[0]}_metrics.txt -Xmx8G REMOVE_DUPLICATES=TRUE TMP_DIR={tmp} && samtools index {output[0]}"
 
 rule base_calibrate:
     input:
@@ -82,10 +83,10 @@ rule recalibrate_bam:
         output + "{id}_{type}_sorted_dedupped.bam",
 	output + "{id}_{type}_recal_data.table"
      output:
-        output + "{id}_{type}_sorted_dedupped_calib.bam"
+        output + "{id}_{type}_sorted_dedupped_calib.bam",
+        output + "{id}_{type}_sorted_dedupped_calib.bam.bai"
      shell:
-       "gatk --java-options '-Xmx8G -Djava.io.tmpdir={tmp}' ApplyBQSR -I {input[0]} -R {REF_GENOME} --bqsr-recal-file {input[1]} -O {output}"
-
+       "gatk --java-options '-Xmx8G -Djava.io.tmpdir={tmp}' ApplyBQSR -I {input[0]} -R {REF_GENOME} --bqsr-recal-file {input[1]} -O {output[0]} --create-output-bam-index false && samtools index {output[0]}"
 
 # CALL SOMATIC SNPs
 

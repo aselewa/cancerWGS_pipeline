@@ -11,7 +11,6 @@
 #SBATCH --mem=2G
 #SBATCH --tasks-per-node=1
 
-module load Anaconda3
 source activate biotools
 
 snakemake \

@@ -12,11 +12,13 @@
     },
     "bwa":
     {
-        "tasks": 16
+        "tasks": 12,
+	"mem": 20000
     },
     "sort_bams":
     {
-        "tasks": 10
+        "tasks": 5,
+        "mem": 15000
     },
     "remove_duplicates":
     {

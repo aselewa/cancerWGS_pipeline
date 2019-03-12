@@ -1,0 +1,788 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cluster nodes: 12
+Job counts:
+	count	jobs
+	1	all
+	24	call_germline_snps
+	1	call_somatic_cnvs
+	24	call_somatic_mutations
+	1	clean_up_and_finish
+	1	concat_somatic_vcfs
+	2	concat_tumor_vcf_files
+	1	filter_somatic_calls
+	24	get_germline_SNP_pos
+	1	keep_pass_SNPs
+	2	readCounts_in_window
+	2	recalibrate_bam
+	24	tumor_VCF_at_germline_SNPs
+	108
+
+[Tue Mar 12 14:07:02 2019]
+rule recalibrate_bam:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_recal_data.table
+    output: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam.bai
+    jobid: 2
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    wildcards: id=SRR, type=normal
+
+gatk --java-options '-Xmx8G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' ApplyBQSR -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta --bqsr-recal-file /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_recal_data.table -O /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam --create-output-bam-index false && samtools index /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+Submitted job 2 with external jobid 'Submitted batch job 58525308'.
+
+[Tue Mar 12 14:07:04 2019]
+rule recalibrate_bam:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_recal_data.table
+    output: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam.bai
+    jobid: 1
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, type=tumor
+
+gatk --java-options '-Xmx8G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' ApplyBQSR -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped.bam -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta --bqsr-recal-file /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_recal_data.table -O /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam --create-output-bam-index false && samtools index /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+Submitted job 1 with external jobid 'Submitted batch job 58525310'.
+[Tue Mar 12 14:07:22 2019]
+Finished job 2.
+1 of 108 steps (0.93%) done
+
+[Tue Mar 12 14:07:22 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_16_germline_SNPS_unfiltered.vcf.gz
+    jobid: 107
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_16_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=16
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_16_germline_SNPS_unfiltered.vcf.gz -L 16
+[Tue Mar 12 14:07:22 2019]
+Finished job 1.
+2 of 108 steps (2%) done
+Submitted job 107 with external jobid 'Submitted batch job 58525315'.
+
+[Tue Mar 12 14:07:22 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_14_germline_SNPS_unfiltered.vcf.gz
+    jobid: 105
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_14_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=14
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_14_germline_SNPS_unfiltered.vcf.gz -L 14
+Submitted job 105 with external jobid 'Submitted batch job 58525316'.
+
+[Tue Mar 12 14:07:22 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_1_germline_SNPS_unfiltered.vcf.gz
+    jobid: 92
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_1_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=1
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_1_germline_SNPS_unfiltered.vcf.gz -L 1
+Submitted job 92 with external jobid 'Submitted batch job 58525317'.
+
+[Tue Mar 12 14:07:22 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_20_germline_SNPS_unfiltered.vcf.gz
+    jobid: 111
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_20_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=20
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_20_germline_SNPS_unfiltered.vcf.gz -L 20
+Submitted job 111 with external jobid 'Submitted batch job 58525318'.
+
+[Tue Mar 12 14:07:22 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_6_germline_SNPS_unfiltered.vcf.gz
+    jobid: 97
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_6_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=6
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_6_germline_SNPS_unfiltered.vcf.gz -L 6
+Submitted job 97 with external jobid 'Submitted batch job 58525319'.
+
+[Tue Mar 12 14:07:22 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_2_germline_SNPS_unfiltered.vcf.gz
+    jobid: 93
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_2_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=2
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_2_germline_SNPS_unfiltered.vcf.gz -L 2
+Submitted job 93 with external jobid 'Submitted batch job 58525320'.
+
+[Tue Mar 12 14:07:22 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_11_germline_SNPS_unfiltered.vcf.gz
+    jobid: 102
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_11_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=11
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_11_germline_SNPS_unfiltered.vcf.gz -L 11
+Submitted job 102 with external jobid 'Submitted batch job 58525321'.
+
+[Tue Mar 12 14:07:22 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_Y_germline_SNPS_unfiltered.vcf.gz
+    jobid: 115
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_Y_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=Y
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_Y_germline_SNPS_unfiltered.vcf.gz -L Y
+Submitted job 115 with external jobid 'Submitted batch job 58525322'.
+
+[Tue Mar 12 14:07:22 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_18_germline_SNPS_unfiltered.vcf.gz
+    jobid: 109
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_18_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=18
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_18_germline_SNPS_unfiltered.vcf.gz -L 18
+Submitted job 109 with external jobid 'Submitted batch job 58525323'.
+
+[Tue Mar 12 14:07:22 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_22_germline_SNPS_unfiltered.vcf.gz
+    jobid: 113
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_22_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=22
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_22_germline_SNPS_unfiltered.vcf.gz -L 22
+Submitted job 113 with external jobid 'Submitted batch job 58525324'.
+
+[Tue Mar 12 14:07:23 2019]
+rule call_germline_snps:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_17_germline_SNPS_unfiltered.vcf.gz
+    jobid: 108
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_17_germline_SNPS_unfiltered.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=17
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' HaplotypeCaller -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta  --genotyping-mode DISCOVERY -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_17_germline_SNPS_unfiltered.vcf.gz -L 17
+Submitted job 108 with external jobid 'Submitted batch job 58525326'.
+
+[Tue Mar 12 14:07:23 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_13_somatic_snps_indels.vcf.gz
+    jobid: 56
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_13_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=13
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam -tumor tumor -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -normal normal -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_13_somatic_snps_indels.vcf.gz -L 13
+Submitted job 56 with external jobid 'Submitted batch job 58525327'.
+[Tue Mar 12 14:07:54 2019]
+Finished job 111.
+3 of 108 steps (3%) done
+
+[Tue Mar 12 14:07:54 2019]
+rule get_germline_SNP_pos:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_20_germline_SNPS_unfiltered.vcf.gz
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_20_germline_SNPs_VARIANT_POS.txt
+    jobid: 87
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_20_germline_SNPs_VARIANT_POS.txt; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_20_germline_SNPS_unfiltered.vcf.gz
+    wildcards: id=SRR, chr=20
+
+bcftools query -f '%CHROM 	 %POS' /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_20_germline_SNPS_unfiltered.vcf.gz > /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_20_germline_SNPs_VARIANT_POS.txt
+[Tue Mar 12 14:07:54 2019]
+Finished job 115.
+4 of 108 steps (4%) done
+[Tue Mar 12 14:07:54 2019]
+Finished job 113.
+5 of 108 steps (5%) done
+Submitted job 87 with external jobid 'Submitted batch job 58525328'.
+
+[Tue Mar 12 14:07:56 2019]
+rule get_germline_SNP_pos:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_Y_germline_SNPS_unfiltered.vcf.gz
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_Y_germline_SNPs_VARIANT_POS.txt
+    jobid: 91
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_Y_germline_SNPs_VARIANT_POS.txt; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_Y_germline_SNPS_unfiltered.vcf.gz
+    wildcards: id=SRR, chr=Y
+
+bcftools query -f '%CHROM 	 %POS' /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_Y_germline_SNPS_unfiltered.vcf.gz > /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_Y_germline_SNPs_VARIANT_POS.txt
+Submitted job 91 with external jobid 'Submitted batch job 58525329'.
+
+[Tue Mar 12 14:07:57 2019]
+rule get_germline_SNP_pos:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_22_germline_SNPS_unfiltered.vcf.gz
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_22_germline_SNPs_VARIANT_POS.txt
+    jobid: 89
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_22_germline_SNPs_VARIANT_POS.txt; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_22_germline_SNPS_unfiltered.vcf.gz
+    wildcards: id=SRR, chr=22
+
+bcftools query -f '%CHROM 	 %POS' /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_22_germline_SNPS_unfiltered.vcf.gz > /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_22_germline_SNPs_VARIANT_POS.txt
+Submitted job 89 with external jobid 'Submitted batch job 58525330'.
+[Tue Mar 12 14:08:05 2019]
+Finished job 107.
+6 of 108 steps (6%) done
+
+[Tue Mar 12 14:08:05 2019]
+rule get_germline_SNP_pos:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_16_germline_SNPS_unfiltered.vcf.gz
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_16_germline_SNPs_VARIANT_POS.txt
+    jobid: 83
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_16_germline_SNPs_VARIANT_POS.txt; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_16_germline_SNPS_unfiltered.vcf.gz
+    wildcards: id=SRR, chr=16
+
+bcftools query -f '%CHROM 	 %POS' /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_16_germline_SNPS_unfiltered.vcf.gz > /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_16_germline_SNPs_VARIANT_POS.txt
+[Tue Mar 12 14:08:05 2019]
+Finished job 105.
+7 of 108 steps (6%) done
+[Tue Mar 12 14:08:05 2019]
+Finished job 108.
+8 of 108 steps (7%) done
+Removing temporary output file /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_20_germline_SNPS_unfiltered.vcf.gz.
+[Tue Mar 12 14:08:05 2019]
+Finished job 87.
+9 of 108 steps (8%) done
+Removing temporary output file /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_Y_germline_SNPS_unfiltered.vcf.gz.
+[Tue Mar 12 14:08:06 2019]
+Finished job 91.
+10 of 108 steps (9%) done
+Removing temporary output file /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_22_germline_SNPS_unfiltered.vcf.gz.
+[Tue Mar 12 14:08:06 2019]
+Finished job 89.
+11 of 108 steps (10%) done
+Submitted job 83 with external jobid 'Submitted batch job 58525332'.
+
+[Tue Mar 12 14:08:07 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_3_somatic_snps_indels.vcf.gz
+    jobid: 46
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_3_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=3
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam -tumor tumor -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -normal normal -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_3_somatic_snps_indels.vcf.gz -L 3
+Submitted job 46 with external jobid 'Submitted batch job 58525333'.
+
+[Tue Mar 12 14:08:07 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_9_somatic_snps_indels.vcf.gz
+    jobid: 52
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_9_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=9
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam -tumor tumor -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -normal normal -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_9_somatic_snps_indels.vcf.gz -L 9
+Submitted job 52 with external jobid 'Submitted batch job 58525334'.
+
+[Tue Mar 12 14:08:07 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_19_somatic_snps_indels.vcf.gz
+    jobid: 62
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_19_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=19
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam -tumor tumor -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -normal normal -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_19_somatic_snps_indels.vcf.gz -L 19
+Submitted job 62 with external jobid 'Submitted batch job 58525335'.
+
+[Tue Mar 12 14:08:07 2019]
+rule get_germline_SNP_pos:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_14_germline_SNPS_unfiltered.vcf.gz
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_14_germline_SNPs_VARIANT_POS.txt
+    jobid: 81
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_14_germline_SNPs_VARIANT_POS.txt; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_14_germline_SNPS_unfiltered.vcf.gz
+    wildcards: id=SRR, chr=14
+
+bcftools query -f '%CHROM 	 %POS' /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_14_germline_SNPS_unfiltered.vcf.gz > /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_14_germline_SNPs_VARIANT_POS.txt
+Submitted job 81 with external jobid 'Submitted batch job 58525336'.
+
+[Tue Mar 12 14:08:07 2019]
+rule get_germline_SNP_pos:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_17_germline_SNPS_unfiltered.vcf.gz
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_17_germline_SNPs_VARIANT_POS.txt
+    jobid: 84
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_17_germline_SNPs_VARIANT_POS.txt; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_17_germline_SNPS_unfiltered.vcf.gz
+    wildcards: id=SRR, chr=17
+
+bcftools query -f '%CHROM 	 %POS' /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_17_germline_SNPS_unfiltered.vcf.gz > /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_17_germline_SNPs_VARIANT_POS.txt
+Submitted job 84 with external jobid 'Submitted batch job 58525337'.
+[Tue Mar 12 14:08:16 2019]
+Finished job 102.
+12 of 108 steps (11%) done
+
+[Tue Mar 12 14:08:16 2019]
+rule get_germline_SNP_pos:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_11_germline_SNPS_unfiltered.vcf.gz
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_11_germline_SNPs_VARIANT_POS.txt
+    jobid: 78
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_11_germline_SNPs_VARIANT_POS.txt; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_11_germline_SNPS_unfiltered.vcf.gz
+    wildcards: id=SRR, chr=11
+
+bcftools query -f '%CHROM 	 %POS' /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_11_germline_SNPS_unfiltered.vcf.gz > /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_11_germline_SNPs_VARIANT_POS.txt
+[Tue Mar 12 14:08:16 2019]
+Finished job 109.
+13 of 108 steps (12%) done
+Removing temporary output file /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_16_germline_SNPS_unfiltered.vcf.gz.
+[Tue Mar 12 14:08:16 2019]
+Finished job 83.
+14 of 108 steps (13%) done
+Submitted job 78 with external jobid 'Submitted batch job 58525341'.
+
+[Tue Mar 12 14:08:16 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_7_somatic_snps_indels.vcf.gz
+    jobid: 50
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_7_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=7
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam -tumor tumor -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -normal normal -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_7_somatic_snps_indels.vcf.gz -L 7
+Submitted job 50 with external jobid 'Submitted batch job 58525342'.
+
+[Tue Mar 12 14:08:16 2019]
+rule get_germline_SNP_pos:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_18_germline_SNPS_unfiltered.vcf.gz
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_18_germline_SNPs_VARIANT_POS.txt
+    jobid: 85
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_18_germline_SNPs_VARIANT_POS.txt; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_18_germline_SNPS_unfiltered.vcf.gz
+    wildcards: id=SRR, chr=18
+
+bcftools query -f '%CHROM 	 %POS' /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_18_germline_SNPS_unfiltered.vcf.gz > /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_18_germline_SNPs_VARIANT_POS.txt
+Submitted job 85 with external jobid 'Submitted batch job 58525343'.
+Removing temporary output file /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_14_germline_SNPS_unfiltered.vcf.gz.
+[Tue Mar 12 14:08:17 2019]
+Finished job 81.
+15 of 108 steps (14%) done
+
+[Tue Mar 12 14:08:17 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_22_somatic_snps_indels.vcf.gz
+    jobid: 65
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_22_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=22
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam -tumor tumor -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -normal normal -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_22_somatic_snps_indels.vcf.gz -L 22
+Removing temporary output file /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_17_germline_SNPS_unfiltered.vcf.gz.
+[Tue Mar 12 14:08:17 2019]
+Finished job 84.
+16 of 108 steps (15%) done
+Submitted job 65 with external jobid 'Submitted batch job 58525344'.
+
+[Tue Mar 12 14:08:17 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_5_somatic_snps_indels.vcf.gz
+    jobid: 48
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_5_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=5
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam -tumor tumor -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -normal normal -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_5_somatic_snps_indels.vcf.gz -L 5
+Submitted job 48 with external jobid 'Submitted batch job 58525345'.
+Removing temporary output file /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_11_germline_SNPS_unfiltered.vcf.gz.
+[Tue Mar 12 14:08:27 2019]
+Finished job 78.
+17 of 108 steps (16%) done
+
+[Tue Mar 12 14:08:27 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_4_somatic_snps_indels.vcf.gz
+    jobid: 47
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_4_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=4
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam -tumor tumor -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -normal normal -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_4_somatic_snps_indels.vcf.gz -L 4
+Removing temporary output file /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_18_germline_SNPS_unfiltered.vcf.gz.
+[Tue Mar 12 14:08:27 2019]
+Finished job 85.
+18 of 108 steps (17%) done
+[Tue Mar 12 14:08:27 2019]
+Finished job 97.
+19 of 108 steps (18%) done
+[Tue Mar 12 14:08:27 2019]
+Finished job 56.
+20 of 108 steps (19%) done
+Submitted job 47 with external jobid 'Submitted batch job 58525346'.
+
+[Tue Mar 12 14:08:27 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_8_somatic_snps_indels.vcf.gz
+    jobid: 51
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_8_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=8
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam -tumor tumor -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -normal normal -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_8_somatic_snps_indels.vcf.gz -L 8
+Submitted job 51 with external jobid 'Submitted batch job 58525347'.
+
+[Tue Mar 12 14:08:27 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_15_somatic_snps_indels.vcf.gz
+    jobid: 58
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_15_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=15
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam -tumor tumor -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -normal normal -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_15_somatic_snps_indels.vcf.gz -L 15
+Submitted job 58 with external jobid 'Submitted batch job 58525348'.
+
+[Tue Mar 12 14:08:27 2019]
+rule get_germline_SNP_pos:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_6_germline_SNPS_unfiltered.vcf.gz
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_6_germline_SNPs_VARIANT_POS.txt
+    jobid: 73
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_6_germline_SNPs_VARIANT_POS.txt; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_6_germline_SNPS_unfiltered.vcf.gz
+    wildcards: id=SRR, chr=6
+
+bcftools query -f '%CHROM 	 %POS' /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_6_germline_SNPS_unfiltered.vcf.gz > /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_6_germline_SNPs_VARIANT_POS.txt
+Submitted job 73 with external jobid 'Submitted batch job 58525349'.
+Removing temporary output file /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_6_germline_SNPS_unfiltered.vcf.gz.
+[Tue Mar 12 14:08:38 2019]
+Finished job 73.
+21 of 108 steps (19%) done
+
+[Tue Mar 12 14:08:38 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_X_somatic_snps_indels.vcf.gz
+    jobid: 66
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_X_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=X
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam -tumor tumor -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -normal normal -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_X_somatic_snps_indels.vcf.gz -L X
+[Tue Mar 12 14:08:38 2019]
+Finished job 62.
+22 of 108 steps (20%) done
+Submitted job 66 with external jobid 'Submitted batch job 58525350'.
+
+[Tue Mar 12 14:08:38 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_10_somatic_snps_indels.vcf.gz
+    jobid: 53
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_10_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=10
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam -tumor tumor -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -normal normal -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_10_somatic_snps_indels.vcf.gz -L 10
+Submitted job 53 with external jobid 'Submitted batch job 58525351'.
+[Tue Mar 12 14:08:49 2019]
+Finished job 92.
+23 of 108 steps (21%) done
+
+[Tue Mar 12 14:08:49 2019]
+rule get_germline_SNP_pos:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_1_germline_SNPS_unfiltered.vcf.gz
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_1_germline_SNPs_VARIANT_POS.txt
+    jobid: 68
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_1_germline_SNPs_VARIANT_POS.txt; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_1_germline_SNPS_unfiltered.vcf.gz
+    wildcards: id=SRR, chr=1
+
+bcftools query -f '%CHROM 	 %POS' /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_1_germline_SNPS_unfiltered.vcf.gz > /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_1_germline_SNPs_VARIANT_POS.txt
+[Tue Mar 12 14:08:49 2019]
+Finished job 93.
+24 of 108 steps (22%) done
+[Tue Mar 12 14:08:50 2019]
+Finished job 65.
+25 of 108 steps (23%) done
+Submitted job 68 with external jobid 'Submitted batch job 58525352'.
+
+[Tue Mar 12 14:08:50 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_12_somatic_snps_indels.vcf.gz
+    jobid: 55
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_12_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=12
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam -tumor tumor -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -normal normal -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_12_somatic_snps_indels.vcf.gz -L 12
+Submitted job 55 with external jobid 'Submitted batch job 58525353'.
+
+[Tue Mar 12 14:08:50 2019]
+rule get_germline_SNP_pos:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_2_germline_SNPS_unfiltered.vcf.gz
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_2_germline_SNPs_VARIANT_POS.txt
+    jobid: 69
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_2_germline_SNPs_VARIANT_POS.txt; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_2_germline_SNPS_unfiltered.vcf.gz
+    wildcards: id=SRR, chr=2
+
+bcftools query -f '%CHROM 	 %POS' /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_2_germline_SNPS_unfiltered.vcf.gz > /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_2_germline_SNPs_VARIANT_POS.txt
+Submitted job 69 with external jobid 'Submitted batch job 58525354'.
+Removing temporary output file /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_1_germline_SNPS_unfiltered.vcf.gz.
+[Tue Mar 12 14:09:00 2019]
+Finished job 68.
+26 of 108 steps (24%) done
+
+[Tue Mar 12 14:09:00 2019]
+rule tumor_VCF_at_germline_SNPs:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_1_germline_SNPs_VARIANT_POS.txt, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_1_tumor_at_germline_SNPs.vcf.gz
+    jobid: 18
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_1_tumor_at_germline_SNPs.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_1_germline_SNPs_VARIANT_POS.txt, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=1
+
+bcftools mpileup -f /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -R /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_1_germline_SNPs_VARIANT_POS.txt -o /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_1_tumor_at_germline_SNPs.vcf.gz -O z /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+Submitted job 18 with external jobid 'Submitted batch job 58525357'.
+Removing temporary output file /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_2_germline_SNPS_unfiltered.vcf.gz.
+[Tue Mar 12 14:09:01 2019]
+Finished job 69.
+27 of 108 steps (25%) done
+
+[Tue Mar 12 14:09:01 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_21_somatic_snps_indels.vcf.gz
+    jobid: 64
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_21_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=21
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam -tumor tumor -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -normal normal -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_21_somatic_snps_indels.vcf.gz -L 21
+Submitted job 64 with external jobid 'Submitted batch job 58525358'.
+Removing temporary output file /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_1_germline_SNPs_VARIANT_POS.txt.
+[Tue Mar 12 14:09:11 2019]
+Finished job 18.
+28 of 108 steps (26%) done
+
+[Tue Mar 12 14:09:11 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_16_somatic_snps_indels.vcf.gz
+    jobid: 59
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_16_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=16
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam -tumor tumor -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -normal normal -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_16_somatic_snps_indels.vcf.gz -L 16
+[Tue Mar 12 14:09:11 2019]
+Finished job 52.
+29 of 108 steps (27%) done
+Submitted job 59 with external jobid 'Submitted batch job 58525359'.
+
+[Tue Mar 12 14:09:11 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_14_somatic_snps_indels.vcf.gz
+    jobid: 57
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_14_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=14
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam -tumor tumor -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -normal normal -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_14_somatic_snps_indels.vcf.gz -L 14
+Submitted job 57 with external jobid 'Submitted batch job 58525360'.
+[Tue Mar 12 14:09:22 2019]
+Finished job 58.
+30 of 108 steps (28%) done
+
+[Tue Mar 12 14:09:22 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_20_somatic_snps_indels.vcf.gz
+    jobid: 63
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_20_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=20
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam -tumor tumor -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -normal normal -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_20_somatic_snps_indels.vcf.gz -L 20
+Submitted job 63 with external jobid 'Submitted batch job 58525362'.
+[Tue Mar 12 14:09:33 2019]
+Finished job 50.
+31 of 108 steps (29%) done
+
+[Tue Mar 12 14:09:33 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_1_somatic_snps_indels.vcf.gz
+    jobid: 44
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_1_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=1
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam -tumor tumor -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -normal normal -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_1_somatic_snps_indels.vcf.gz -L 1
+[Tue Mar 12 14:09:33 2019]
+Finished job 46.
+32 of 108 steps (30%) done
+[Tue Mar 12 14:09:33 2019]
+Finished job 48.
+33 of 108 steps (31%) done
+Submitted job 44 with external jobid 'Submitted batch job 58525363'.
+
+[Tue Mar 12 14:09:33 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_2_somatic_snps_indels.vcf.gz
+    jobid: 45
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_2_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=2
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam -tumor tumor -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -normal normal -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_2_somatic_snps_indels.vcf.gz -L 2
+Submitted job 45 with external jobid 'Submitted batch job 58525364'.
+
+[Tue Mar 12 14:09:33 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_6_somatic_snps_indels.vcf.gz
+    jobid: 49
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_6_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=6
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam -tumor tumor -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -normal normal -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_6_somatic_snps_indels.vcf.gz -L 6
+Submitted job 49 with external jobid 'Submitted batch job 58525365'.
+[Tue Mar 12 14:09:44 2019]
+Finished job 66.
+34 of 108 steps (31%) done
+
+[Tue Mar 12 14:09:44 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_Y_somatic_snps_indels.vcf.gz
+    jobid: 67
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_Y_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=Y
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam -tumor tumor -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -normal normal -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_Y_somatic_snps_indels.vcf.gz -L Y
+[Tue Mar 12 14:09:44 2019]
+Finished job 47.
+35 of 108 steps (32%) done
+[Tue Mar 12 14:09:44 2019]
+Finished job 51.
+36 of 108 steps (33%) done
+Submitted job 67 with external jobid 'Submitted batch job 58525366'.
+
+[Tue Mar 12 14:09:44 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_11_somatic_snps_indels.vcf.gz
+    jobid: 54
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_11_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=11
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam -tumor tumor -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -normal normal -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_11_somatic_snps_indels.vcf.gz -L 11
+Submitted job 54 with external jobid 'Submitted batch job 58525368'.
+
+[Tue Mar 12 14:09:44 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_18_somatic_snps_indels.vcf.gz
+    jobid: 61
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_18_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=18
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam -tumor tumor -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -normal normal -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_18_somatic_snps_indels.vcf.gz -L 18
+Submitted job 61 with external jobid 'Submitted batch job 58525369'.
+[Tue Mar 12 14:09:45 2019]
+Finished job 64.
+37 of 108 steps (34%) done
+
+[Tue Mar 12 14:09:45 2019]
+rule call_somatic_mutations:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_17_somatic_snps_indels.vcf.gz
+    jobid: 60
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_17_somatic_snps_indels.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=17
+
+gatk --java-options '-Xmx1G -Djava.io.tmpdir=/project2/xinhe/alan/Cancer/sampleData/tmp/' Mutect2 -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam -tumor tumor -I /project2/xinhe/alan/Cancer/sampleData/output/SRR_normal_sorted_dedupped_calib.bam -normal normal -R /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -O /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_17_somatic_snps_indels.vcf.gz -L 17
+Submitted job 60 with external jobid 'Submitted batch job 58525370'.
+[Tue Mar 12 14:09:55 2019]
+Finished job 59.
+38 of 108 steps (35%) done
+
+[Tue Mar 12 14:09:55 2019]
+rule tumor_VCF_at_germline_SNPs:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_16_germline_SNPs_VARIANT_POS.txt, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_16_tumor_at_germline_SNPs.vcf.gz
+    jobid: 33
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_16_tumor_at_germline_SNPs.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_16_germline_SNPs_VARIANT_POS.txt, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=16
+
+bcftools mpileup -f /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -R /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_16_germline_SNPs_VARIANT_POS.txt -o /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_16_tumor_at_germline_SNPs.vcf.gz -O z /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+[Tue Mar 12 14:09:55 2019]
+Finished job 53.
+39 of 108 steps (36%) done
+[Tue Mar 12 14:09:56 2019]
+Finished job 55.
+40 of 108 steps (37%) done
+Submitted job 33 with external jobid 'Submitted batch job 58525373'.
+
+[Tue Mar 12 14:09:57 2019]
+rule tumor_VCF_at_germline_SNPs:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_14_germline_SNPs_VARIANT_POS.txt, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_14_tumor_at_germline_SNPs.vcf.gz
+    jobid: 31
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_14_tumor_at_germline_SNPs.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_14_germline_SNPs_VARIANT_POS.txt, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=14
+
+bcftools mpileup -f /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -R /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_14_germline_SNPs_VARIANT_POS.txt -o /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_14_tumor_at_germline_SNPs.vcf.gz -O z /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+Submitted job 31 with external jobid 'Submitted batch job 58525374'.
+
+[Tue Mar 12 14:09:57 2019]
+rule tumor_VCF_at_germline_SNPs:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_Y_germline_SNPs_VARIANT_POS.txt, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_Y_tumor_at_germline_SNPs.vcf.gz
+    jobid: 41
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_Y_tumor_at_germline_SNPs.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_Y_germline_SNPs_VARIANT_POS.txt, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=Y
+
+bcftools mpileup -f /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -R /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_Y_germline_SNPs_VARIANT_POS.txt -o /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_Y_tumor_at_germline_SNPs.vcf.gz -O z /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+Submitted job 41 with external jobid 'Submitted batch job 58525375'.
+[Tue Mar 12 14:10:06 2019]
+Finished job 63.
+41 of 108 steps (38%) done
+
+[Tue Mar 12 14:10:06 2019]
+rule tumor_VCF_at_germline_SNPs:
+    input: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_11_germline_SNPs_VARIANT_POS.txt, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_11_tumor_at_germline_SNPs.vcf.gz
+    jobid: 28
+    reason: Missing output files: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_11_tumor_at_germline_SNPs.vcf.gz; Input files updated by another job: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_11_germline_SNPs_VARIANT_POS.txt, /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+    wildcards: id=SRR, chr=11
+
+bcftools mpileup -f /project2/xinhe/alan/Cancer/refGenome/GRCh37Lite.fasta -R /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_11_germline_SNPs_VARIANT_POS.txt -o /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_11_tumor_at_germline_SNPs.vcf.gz -O z /project2/xinhe/alan/Cancer/sampleData/output/SRR_tumor_sorted_dedupped_calib.bam
+[Tue Mar 12 14:10:06 2019]
+Finished job 57.
+42 of 108 steps (39%) done
+[Tue Mar 12 14:10:06 2019]
+Error in rule tumor_VCF_at_germline_SNPs:
+    jobid: 33
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_16_tumor_at_germline_SNPs.vcf.gz
+    cluster_jobid: Submitted batch job 58525373
+
+Submitted job 28 with external jobid 'Submitted batch job 58525376'.
+[Tue Mar 12 14:10:07 2019]
+Error in rule tumor_VCF_at_germline_SNPs:
+    jobid: 31
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_14_tumor_at_germline_SNPs.vcf.gz
+    cluster_jobid: Submitted batch job 58525374
+
+[Tue Mar 12 14:10:07 2019]
+Error in rule tumor_VCF_at_germline_SNPs:
+    jobid: 41
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_Y_tumor_at_germline_SNPs.vcf.gz
+    cluster_jobid: Submitted batch job 58525375
+
+[Tue Mar 12 14:10:17 2019]
+Error in rule tumor_VCF_at_germline_SNPs:
+    jobid: 28
+    output: /project2/xinhe/alan/Cancer/sampleData/output/VCFs/SRR_11_tumor_at_germline_SNPs.vcf.gz
+    cluster_jobid: Submitted batch job 58525376
+
+[Tue Mar 12 14:10:27 2019]
+Finished job 67.
+43 of 108 steps (40%) done
+[Tue Mar 12 14:10:37 2019]
+Finished job 61.
+44 of 108 steps (41%) done
+[Tue Mar 12 14:10:37 2019]
+Finished job 60.
+45 of 108 steps (42%) done
+[Tue Mar 12 14:10:47 2019]
+Finished job 54.
+46 of 108 steps (43%) done
+[Tue Mar 12 14:10:47 2019]
+Finished job 49.
+47 of 108 steps (44%) done
+[Tue Mar 12 14:10:57 2019]
+Finished job 45.
+48 of 108 steps (44%) done
+[Tue Mar 12 14:11:07 2019]
+Finished job 44.
+49 of 108 steps (45%) done
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /project2/xinhe/alan/Cancer/cancerWGS_pipeline/.snakemake/log/2019-03-12T140701.837500.snakemake.log
