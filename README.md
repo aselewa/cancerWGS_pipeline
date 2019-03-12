@@ -58,6 +58,13 @@ If running on the cluster, please edit the `cluster.json` config file to match y
 sbatch snakemake.sbatch
 ```
 
+#### DAG of Snakemake protocol
+
+A more detailed graph is obtained using the dag feature in snakemake.
+
+<div align="center">
+<img src="DAG.svg">
+</div>
 
 
 
