@@ -1,2 +1,4 @@
+snakelog.out
+snakemake
 .snakemake/*
 .DS_Store
